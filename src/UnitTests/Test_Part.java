@@ -12,6 +12,7 @@ import assignment2.Part;
 public class Test_Part {
 	
 	Integer quantity;
+	String unitOfQuantity;
 	String partName;
 	String partNumber;
 	String vendor;
@@ -19,7 +20,8 @@ public class Test_Part {
 	
 	@Before 
 	public void setUp() {
-		quantity = 1;
+		quantity = 2;
+		unitOfQuantity = "Pieces";
 		partName = "The Part Name v1.0";
 		partNumber = "18J-2015A1";
 		vendor = "The_Vendor @ 1 UTSA Cir";
@@ -28,8 +30,9 @@ public class Test_Part {
 	@Test
 	public void testPartCreation_NoVendor() {
 		try {
-			p = new Part(quantity, partName, partNumber);
+			p = new Part(quantity, unitOfQuantity, partName, partNumber);
 			assertTrue(p.getQuantity() == quantity);
+			assertTrue(p.getQuantityUnitType().equals(unitOfQuantity));
 			assertTrue(p.getPartName().equals(partName));
 			assertTrue(p.getPartNumber().equals(partNumber));
 			assertTrue(p.getVendor().equals(""));
@@ -42,8 +45,9 @@ public class Test_Part {
 	@Test
 	public void testPartCreation_WithVendor() {
 		try {
-			p = new Part(quantity, partName, partNumber, vendor);
+			p = new Part(quantity, unitOfQuantity, partName, partNumber, vendor);
 			assertTrue(p.getQuantity() == quantity);
+			assertTrue(p.getQuantityUnitType().equals(unitOfQuantity));
 			assertTrue(p.getPartName().equals(partName));
 			assertTrue(p.getPartNumber().equals(partNumber));
 			assertTrue(p.getVendor().equals(vendor));
@@ -57,9 +61,48 @@ public class Test_Part {
 	public void testPartCreation_QuantityError() throws IOException {
 		Integer badQuantity = -1;
 		try {
-			p = new Part(badQuantity, partName, partNumber);
+			p = new Part(badQuantity, unitOfQuantity, partName, partNumber);
 			fail("Should have thrown an exception: quantity is: " + 
 					badQuantity + "and was set as " + p.getQuantity());
+		}
+		catch (IOException e) {
+			throw new IOException(e); // expected behavior - should fail if no exception caught
+		}
+	}
+	
+	@Test (expected = IOException.class)
+	public void testPartCreation_UnitOfQuantityError_Unrecognized() throws IOException {
+		String badUnit = "Feet";
+		try {
+			p = new Part(quantity, badUnit, partName, partNumber);
+			fail("Should have thrown an exception: unit type of quantity is: " + 
+					badUnit + "and was set as " + p.getQuantityUnitType());
+		}
+		catch (IOException e) {
+			throw new IOException(e); // expected behavior - should fail if no exception caught
+		}
+	}
+	
+	@Test (expected = IOException.class)
+	public void testPartCreation_UnitOfQuantityError_Unknown() throws IOException {
+		String badUnit = "Unknown";
+		try {
+			p = new Part(quantity, badUnit, partName, partNumber);
+			fail("Should have thrown an exception: unit type of quantity is: " + 
+					badUnit + "and was set as " + p.getQuantityUnitType());
+		}
+		catch (IOException e) {
+			throw new IOException(e); // expected behavior - should fail if no exception caught
+		}
+	}
+	
+	@Test (expected = IOException.class)
+	public void testPartCreation_UnitOfQuantityError_Empty() throws IOException {
+		String badUnit = "";
+		try {
+			p = new Part(quantity, badUnit, partName, partNumber);
+			fail("Should have thrown an exception: unit type of quantity is: " + 
+					badUnit + "and was set as " + p.getQuantityUnitType());
 		}
 		catch (IOException e) {
 			throw new IOException(e); // expected behavior - should fail if no exception caught
@@ -73,7 +116,7 @@ public class Test_Part {
 			longPartName = longPartName + "A"; // add one letter to the string
 		}
 		try {
-			p = new Part(quantity, longPartName, partNumber);
+			p = new Part(quantity, unitOfQuantity, longPartName, partNumber);
 		}
 		catch (IOException e) {
 			fail("Exception thrown during unexceptional part creation: partName length is: " + 
@@ -88,7 +131,7 @@ public class Test_Part {
 			longPartName = longPartName + "A"; // add one letter to the string
 		}
 		try {
-			p = new Part(quantity, longPartName, partNumber);
+			p = new Part(quantity, unitOfQuantity, longPartName, partNumber);
 			fail("Should have thrown an exception: partName length is: " + 
 					p.getPartName().length() + " and limit is: " + Part.getMaxPartNameLength());
 		}
@@ -104,7 +147,7 @@ public class Test_Part {
 			longPartNumber = longPartNumber + "A"; // add one letter to the string
 		}
 		try {
-			p = new Part(quantity, partName, longPartNumber);
+			p = new Part(quantity, unitOfQuantity, partName, longPartNumber);
 		}
 		catch (IOException e) {
 			fail("Exception thrown during unexceptional part creation: partName length is: " + 
@@ -119,7 +162,7 @@ public class Test_Part {
 			longPartNumber = longPartNumber + "A"; // add one letter to the string
 		}
 		try {
-			p = new Part(quantity, partName, longPartNumber);
+			p = new Part(quantity, unitOfQuantity, partName, longPartNumber);
 			fail("Should have thrown an exception: partName length is: " + 
 					p.getPartName().length() + " and limit is: " + Part.getMaxPartNumberLength());
 		}
@@ -135,7 +178,7 @@ public class Test_Part {
 			longVendor = longVendor + "A"; // add one letter to the string
 		}
 		try {
-			p = new Part(quantity, partName, partNumber, longVendor);
+			p = new Part(quantity, unitOfQuantity, partName, partNumber, longVendor);
 		}
 		catch (IOException e) {
 			fail("Exception thrown during unexceptional part creation: vendor length is: " + 
@@ -150,7 +193,7 @@ public class Test_Part {
 			longVendor = longVendor + "A"; // add one letter to the string
 		}
 		try {
-			p = new Part(quantity, partName, partNumber, longVendor);
+			p = new Part(quantity, unitOfQuantity, partName, partNumber, longVendor);
 			fail("Should have thrown an exception: vendor length is: " + 
 					p.getVendor().length() + " and limit is: " + Part.getMaxVendorLength());
 		}
