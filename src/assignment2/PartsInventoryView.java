@@ -1,23 +1,29 @@
 package assignment2;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 @SuppressWarnings("serial")
-public class PartsInventoryView extends JFrame {	
+public class PartsInventoryView extends JFrame  {	
 	private PartsInventoryModel model;
 
-	private JPanel inventoryFrame, inventoryUI; // layers 1, 2, 3
+	private JPanel inventoryFrame; // layers 1, 2, 3
 	private JButton addPart, deletePart, viewPart;
-	private JButton headingName, headingNumber, headingVendor, headingQuantity;
-	private JList<Part> inventory;
-	private DefaultListModel<Part> list;
 	private int GUIWidth;
 	private int GUIHeight;
-	private Color offWhite = new Color(232, 232, 232);
-	private JScrollPane inventoryListPanel;
+	private String[] columnNames = {"Part Name", "Part Number", "Vendor", "Quantity"};
+	private JTable table;
+	private JScrollPane tableScrollPane;
+	private JPanel p;
+	private ListSelectionModel tableSelectionModel;
+	private DefaultTableModel tableModel;
+	private Object[] rowData;
 
 	public PartsInventoryView(PartsInventoryModel model) {
 		super("Cabinetron");
@@ -27,9 +33,8 @@ public class PartsInventoryView extends JFrame {
 		GUIHeight = 500;
 
 		this.setSize(GUIWidth, GUIHeight);
-		this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - (GUIWidth / 2), (Toolkit.getDefaultToolkit().getScreenSize().height / 2) - (GUIHeight / 2));
-		this.setVisible(true);
-		
+		this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - (GUIWidth / 2), 
+						 (Toolkit.getDefaultToolkit().getScreenSize().height / 2) - (GUIHeight / 2));
 		
 		// Sets up the inventory frame 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,8 +42,38 @@ public class PartsInventoryView extends JFrame {
 		inventoryFrame.setSize(GUIWidth, GUIHeight);
 		inventoryFrame.setBackground(Color.LIGHT_GRAY);
 		inventoryFrame.setBorder(new EmptyBorder(5, 5, 5, 5));
+		inventoryFrame.setOpaque(true);
 		setContentPane(inventoryFrame);
 		inventoryFrame.setLayout(null);
+
+		table = new JTable() {
+			public boolean isCellEditable(int row, int col)
+		    {
+		        return false;
+		    }
+		};
+		tableModel = (DefaultTableModel) table.getModel();
+		table.setColumnSelectionAllowed(false);
+		tableModel.setColumnIdentifiers(columnNames);
+		table.setPreferredScrollableViewportSize(new Dimension(GUIWidth, GUIHeight));
+		
+		for (Part p: model.getInventory()) {
+			rowData = new Object[] {p.getPartName(), p.getPartNumber(), p.getVendor(), p.getQuantity()};
+			tableModel.addRow(rowData);
+		}
+	
+		table.setModel(tableModel);
+		p = new JPanel();
+		p.setBounds(0, 0, GUIWidth - 15, GUIHeight);
+
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tableSelectionModel = table.getSelectionModel();
+		
+		tableScrollPane = new JScrollPane(table);
+		tableScrollPane.setPreferredSize(new Dimension(GUIWidth - 30, GUIHeight - 100));
+		tableScrollPane.setVisible(true);
+
+		p.add(tableScrollPane);
 		
 		// Creates and adds the "add" button to the inventory frame
 		addPart = new JButton("Add");
@@ -57,66 +92,21 @@ public class PartsInventoryView extends JFrame {
 		disableView();
 		inventoryFrame.add(viewPart);
 		
-		// Creates the panel to hold the parts within the inventory frame
-		inventoryListPanel = new JScrollPane();
-		inventoryListPanel.setBackground(Color.WHITE);
-		inventoryListPanel.setBounds(15, 40, inventoryFrame.getWidth() - 45, inventoryFrame.getHeight() - 150);
-		
-		inventoryUI = new JPanel();
-		inventoryUI.setBackground(offWhite);
-		inventoryUI.setBounds(15, 15, inventoryListPanel.getWidth(), 25);
-		inventoryUI.setLayout(null);
-		
-		headingName = new JButton("Part Name");
-		headingName.setBackground(offWhite);
-		headingName.setBounds(0, 0, inventoryListPanel.getWidth() / 4, 25);
-		headingName.setFocusPainted(false);
-		inventoryUI.add(headingName);
-		
-		headingNumber = new JButton("Part #");
-		headingNumber.setBackground(offWhite);
-		headingNumber.setBounds((inventoryListPanel.getWidth() / 4) * 1, 0, inventoryListPanel.getWidth() / 4, 25);
-		headingNumber.setFocusPainted(false);
-		inventoryUI.add(headingNumber);
-		
-		headingVendor = new JButton("Vendor");
-		headingVendor.setBackground(offWhite);
-		headingVendor.setBounds((inventoryListPanel.getWidth() / 4) * 2, 0, inventoryListPanel.getWidth() / 4, 25);
-		headingVendor.setFocusPainted(false);
-		inventoryUI.add(headingVendor);
-		
-		headingQuantity = new JButton("Quantity");
-		headingQuantity.setBackground(offWhite);
-		headingQuantity.setBounds((inventoryListPanel.getWidth() / 4) * 3, 0, (inventoryListPanel.getWidth() / 4) + (inventoryListPanel.getWidth() % 4), 25);
-		headingQuantity.setFocusPainted(false);
-		inventoryUI.add(headingQuantity);
-
-		list = new DefaultListModel<Part>();
-		for (Part p : model.getInventory()) {
-			list.addElement(p);
-		}
-		inventory = new JList<Part>(list);
-		inventory.setBackground(Color.WHITE);
-		inventory.setBounds(0, 0, inventoryListPanel.getWidth(), inventoryListPanel.getHeight());
-		inventory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		inventoryListPanel.setViewportView(inventory);
-		
-		inventoryFrame.add(inventoryUI);
-		inventoryFrame.add(inventoryListPanel);
+		p.setVisible(true);
+		inventoryFrame.add(p);
+		inventoryFrame.setVisible(true);
+		this.setVisible(true);
 		
 		repaint();
 	}
 	
-	public void updatePanel() {
-		list.removeAllElements();
-		
-		for (Part p : model.getInventory()) {
-			list.addElement(p);
+	public void updatePanel() { // tears down the entire table and re-populates it
+		tableModel.setRowCount(0);
+		for (Part p: model.getInventory()) {
+			rowData = new Object[] {p.getPartName(), p.getPartNumber(), p.getVendor(), p.getQuantity()};
+			tableModel.addRow(rowData);
 		}
-		inventory.setModel(list);
-		inventory.setBackground(Color.WHITE);
-		inventory.setBounds(0, 0, inventoryListPanel.getWidth(), inventoryListPanel.getHeight());
-		inventoryListPanel.setViewportView(inventory);
+		table.setModel(tableModel);
 	}
 
 	
@@ -124,11 +114,29 @@ public class PartsInventoryView extends JFrame {
 		addPart.addActionListener(controller);
 		deletePart.addActionListener(controller);
 		viewPart.addActionListener(controller);
-		headingName.addActionListener(controller);
-		headingNumber.addActionListener(controller);
-		headingVendor.addActionListener(controller);
-		headingQuantity.addActionListener(controller);
-		inventory.addListSelectionListener(controller);
+		tableSelectionModel.addListSelectionListener(controller);
+		table.getTableHeader().addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent e) {
+		        int col = table.columnAtPoint(e.getPoint());
+		        String columnName = table.getColumnName(col);
+		        switch (columnName) {
+		        case "Part Name":
+		        	model.sortByPartName();
+		        	break;
+		        case "Part Number":
+		        	model.sortByPartNumber();
+		        	break;
+		        case "Vendor":
+		        	model.sortByVendor();
+		        	break;
+		        case "Quantity":
+		        	model.sortByQuantity();
+		        	break;
+		        }
+		        updatePanel();
+		    }
+		});
 	}
 	
 	public int getWidth() {
@@ -153,5 +161,14 @@ public class PartsInventoryView extends JFrame {
 	
 	public void enableView() {
 		viewPart.setEnabled(true);
+	}
+	
+	public Part getObjectInRow(int index) {
+		for (int i = 0; i < table.getColumnCount(); i++) {
+			if (table.getColumnName(i).equals("Part Name")) {
+				return model.findPartName(table.getValueAt(index, i).toString());
+			}
+		}
+		return null;
 	}
 }
