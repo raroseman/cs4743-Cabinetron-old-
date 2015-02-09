@@ -17,7 +17,7 @@ public class PartsInventoryView extends JFrame  {
 	private JButton addPart, deletePart, viewPart;
 	private int GUIWidth;
 	private int GUIHeight;
-	private String[] columnNames = {"Part Name", "Part Number", "Vendor", "Quantity"};
+	private String[] columnNames = {"ID", "Part Name", "Part Number", "Vendor", "Quantity"};
 	private JTable table;
 	private JScrollPane tableScrollPane;
 	private JPanel p;
@@ -58,7 +58,7 @@ public class PartsInventoryView extends JFrame  {
 		table.setPreferredScrollableViewportSize(new Dimension(GUIWidth, GUIHeight));
 		
 		for (Part p: model.getInventory()) {
-			rowData = new Object[] {p.getPartName(), p.getPartNumber(), p.getVendor(), p.getQuantity()};
+			rowData = new Object[] {p.getID(), p.getPartName(), p.getPartNumber(), p.getVendor(), p.getQuantity()};
 			tableModel.addRow(rowData);
 		}
 	
@@ -103,7 +103,7 @@ public class PartsInventoryView extends JFrame  {
 	public void updatePanel() { // tears down the entire table and re-populates it
 		tableModel.setRowCount(0);
 		for (Part p: model.getInventory()) {
-			rowData = new Object[] {p.getPartName(), p.getPartNumber(), p.getVendor(), p.getQuantity()};
+			rowData = new Object[] {p.getID(), p.getPartName(), p.getPartNumber(), p.getVendor(), p.getQuantity()};
 			tableModel.addRow(rowData);
 		}
 		table.setModel(tableModel);

@@ -19,6 +19,7 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 	private Color highlightedColor = new Color(255, 255, 153);
 	private Part selectedPart = null;
 	private boolean hasPartViewOpen;
+	private static int id = 57;
 	
 	public PartsInventoryController(PartsInventoryModel inventoryModel, PartsInventoryView inventoryView) {
 		lastButtonClicked = null;
@@ -41,6 +42,8 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 				ClearSelection();
 				partView = new PartView("Add New Part");
 				partView.register(this);
+				partView.disableIDEdit();
+				partView.setID(id + 1);
 				partView.hideSaveButton();
 				partView.hideEditButton();
 				hasPartViewOpen = true;
@@ -68,6 +71,7 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 					partView.register(this);
 					partView.disableEditable();
 					partView.setName(selectedPart.getPartName());
+					partView.setID(selectedPart.getID());
 					partView.setNumber(selectedPart.getPartNumber());
 					partView.setVendor(selectedPart.getVendor());
 					partView.setQuantity(selectedPart.getQuantity());
@@ -84,7 +88,7 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 			case "Save":
 				if (selectedPart != null) {
 					try {
-						Part newPart = new Part(partView.getQuantity(), partView.getName(), partView.getNumber(), partView.getVendor());
+						Part newPart = new Part(partView.getID(), partView.getQuantity(), partView.getName(), partView.getNumber(), partView.getVendor());
 						partsInventoryModel.editPart(selectedPart, newPart);
 						partView.dispose();
 						inventoryView.updatePanel();
@@ -100,19 +104,22 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 				break;
 			case "OK":
 				try {
-					Part part = new Part(partView.getQuantity(), partView.getName(), partView.getNumber(), partView.getVendor());		
+					Part part = new Part(++id, partView.getQuantity(), partView.getName(), partView.getNumber(), partView.getVendor());		
 					partsInventoryModel.addPart(part);
 					partView.dispose();
 					inventoryView.updatePanel();
 					inventoryView.repaint();
 				}
 				catch (NumberFormatException noint) {
+					id--;
 					partView.setErrorMessage(noint.getMessage());
 				}
 				catch (IOException ioex) {
+					id--;
 					partView.setErrorMessage(ioex.getMessage());
 				}
 				catch (Exception ex) {
+					id--;
 					partView.setErrorMessage(ex.getMessage());
 				}
 				break;

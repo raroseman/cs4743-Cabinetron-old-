@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Comparator;
 
 public class Part implements Comparable<Part> {
+	private Integer id = 0;
 	private Integer quantity = 0;
 	private String partName = "";
 	private String partNumber = "";
@@ -12,8 +13,9 @@ public class Part implements Comparable<Part> {
 	private static int maxPartNumberLength = 20;
 	private static int maxVendorLength = 255;
 	
-	public Part(Integer quantity, String partName, String partNum) throws IOException {
+	public Part(Integer id, Integer quantity, String partName, String partNum) throws IOException {
 		try {
+			setID(id);
 			setQuantity(quantity);
 			setPartName(partName);
 			setPartNumber(partNum);
@@ -24,8 +26,8 @@ public class Part implements Comparable<Part> {
 		}
 	}
 	
-	public Part(Integer quantity, String partName, String partNum, String vendor) throws IOException {
-		this(quantity, partName, partNum);
+	public Part(Integer id, Integer quantity, String partName, String partNum, String vendor) throws IOException {
+		this(id, quantity, partName, partNum);
 		setVendor(vendor);
 	}
 	
@@ -35,6 +37,10 @@ public class Part implements Comparable<Part> {
 	
 	public String getPartName() {
 		return this.partName;
+	}
+	
+	public Integer getID() {
+		return this.id;
 	}
 	
 	public String getPartNumber() {
@@ -63,6 +69,15 @@ public class Part implements Comparable<Part> {
 	
 	public static int getMaxVendorLength() {
 		return maxVendorLength;
+	}
+	
+	private void setID(Integer id) throws IOException {
+		if (id < 1) {
+			throw new IOException("Error: cannot assign negative value to quantity.");
+		}
+		else {
+			this.id = id;
+		}
 	}
 	
 	private void setQuantity(Integer quantity) throws IOException {
