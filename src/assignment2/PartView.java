@@ -1,6 +1,7 @@
 package assignment2;
 
 import java.awt.Color;
+import java.awt.Toolkit;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -18,12 +19,18 @@ public class PartView extends JFrame {
 	private JTextField nameField, numberField, vendorField, quantityField;
 	private JComboBox<String> quantityUnitTypeField;
 	
+	private int viewWidth, viewHeight;
+	
 	public PartView(PartsInventoryModel model, String title) {
 		super(title);
+		
+		viewWidth = 400;
+		viewHeight = 340;
 
-			this.setSize(400, 340);
+			this.setSize(viewWidth, viewHeight);
 			this.setVisible(true);
-			this.setLocation(900, 250);
+			this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - (viewWidth / 2) + 50, 
+					 (Toolkit.getDefaultToolkit().getScreenSize().height / 2) - (viewHeight / 2));
 			
 			partFrame = new JPanel();
 			partFrame.setBackground(Color.LIGHT_GRAY);
