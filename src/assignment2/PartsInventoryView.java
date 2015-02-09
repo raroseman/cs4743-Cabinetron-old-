@@ -103,7 +103,7 @@ public class PartsInventoryView extends JFrame  {
 	public void updatePanel() { // tears down the entire table and re-populates it
 		tableModel.setRowCount(0);
 		for (Part p: model.getInventory()) {
-			rowData = new Object[] {p.getPartName(), p.getPartNumber(), p.getVendor(), p.getQuantity()};
+			rowData = new Object[] {p.getPartName(), p.getPartNumber(), p.getVendor(), p.getQuantity(), p.getQuantityUnitType()};
 			tableModel.addRow(rowData);
 		}
 		table.setModel(tableModel);

@@ -9,7 +9,7 @@ public class Part implements Comparable<Part> {
 	private String partNumber = "";
 	private String vendor = "";
 	private String quantityUnitType = "Unknown";
-	private static String[] unitTypes = new String[] { "Linear Feet", "Pieces", "Unknown" };
+	private static String[] unitTypes = new String[] { "Unknown", "Linear Feet", "Pieces" };
 	private static int maxPartNameLength = 255;
 	private static int maxPartNumberLength = 20;
 	private static int maxVendorLength = 255;
