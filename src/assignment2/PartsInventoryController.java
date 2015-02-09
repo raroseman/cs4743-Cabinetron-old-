@@ -39,7 +39,7 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 					partView.dispose();
 				}
 				ClearSelection();
-				partView = new PartView("Add New Part");
+				partView = new PartView(partsInventoryModel, "Add New Part");
 				partView.register(this);
 				partView.hideSaveButton();
 				partView.hideEditButton();
@@ -64,13 +64,14 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 				if (selectedPart != null) {
 					inventoryView.disableDelete();
 					inventoryView.disableView();
-					partView = new PartView("View/Edit Part: " + selectedPart.getPartName());
+					partView = new PartView(partsInventoryModel, "View/Edit Part: " + selectedPart.getPartName());
 					partView.register(this);
 					partView.disableEditable();
 					partView.setName(selectedPart.getPartName());
 					partView.setNumber(selectedPart.getPartNumber());
 					partView.setVendor(selectedPart.getVendor());
 					partView.setQuantity(selectedPart.getQuantity());
+					partView.setQuantityUnitType(selectedPart.getQuantityUnitType());
 					inventoryView.updatePanel();
 					inventoryView.repaint();
 					hasPartViewOpen = true;
@@ -84,7 +85,7 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 			case "Save":
 				if (selectedPart != null) {
 					try {
-						Part newPart = new Part(partView.getQuantity(), partView.getName(), partView.getNumber(), partView.getVendor());
+						Part newPart = new Part(partView.getQuantity(), partView.getQuantityUnitType(), partView.getName(), partView.getNumber(), partView.getVendor());
 						partsInventoryModel.editPart(selectedPart, newPart);
 						partView.dispose();
 						inventoryView.updatePanel();
@@ -100,7 +101,7 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 				break;
 			case "OK":
 				try {
-					Part part = new Part(partView.getQuantity(), partView.getName(), partView.getNumber(), partView.getVendor());		
+					Part part = new Part(partView.getQuantity(), partView.getQuantityUnitType(), partView.getName(), partView.getNumber(), partView.getVendor());		
 					partsInventoryModel.addPart(part);
 					partView.dispose();
 					inventoryView.updatePanel();

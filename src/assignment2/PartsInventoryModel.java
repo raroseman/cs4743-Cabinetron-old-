@@ -142,6 +142,10 @@ public class PartsInventoryModel {
 		return partsInventory;
 	}
 	
+	public String[] getValidQuantityUnitTypes() {
+		return Part.getValidQuantityUnitTypes();
+	}
+	
 	public void sortByQuantity() {
 		if (sortingMode == Part.QuantityDescending) {
 			sortingMode = Part.QuantityAscending;

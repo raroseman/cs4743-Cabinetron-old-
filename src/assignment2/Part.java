@@ -9,7 +9,7 @@ public class Part implements Comparable<Part> {
 	private String partNumber = "";
 	private String vendor = "";
 	private String quantityUnitType = "Unknown";
-	private String[] unitTypes = new String[] { "Linear Feet", "Pieces", "Unknown" };
+	private static String[] unitTypes = new String[] { "Linear Feet", "Pieces", "Unknown" };
 	private static int maxPartNameLength = 255;
 	private static int maxPartNumberLength = 20;
 	private static int maxVendorLength = 255;
@@ -38,6 +38,10 @@ public class Part implements Comparable<Part> {
 	
 	public String getQuantityUnitType() {
 		return this.quantityUnitType;
+	}
+	
+	public static String[] getValidQuantityUnitTypes() {
+		return unitTypes;
 	}
 	
 	public String getPartName() {
