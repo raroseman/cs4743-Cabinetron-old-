@@ -10,18 +10,21 @@ public class Part implements Comparable<Part> {
 	private String partNumber = "";
 	private String vendor = "";
 	private String quantityUnitType = "Unknown";
+	private String location = "";
+	private static String[] locationTypes = new String[] { "Unknown", "Facility 1 Warehouse 1", "Facility 1 Warehouse 2", "Facility 2" };
 	private static String[] unitTypes = new String[] { "Unknown", "Linear Feet", "Pieces" };
 	private static int maxPartNameLength = 255;
 	private static int maxPartNumberLength = 20;
 	private static int maxVendorLength = 255;
 	
-	public Part(Integer id, Integer quantity, String quantityUnitType, String partName, String partNum) throws IOException {
+	public Part(Integer id, Integer quantity, String quantityUnitType, String partName, String partNum, String location) throws IOException {
 		try {
 			setID(id);
 			setQuantity(quantity);
 			setQuantityUnitType(quantityUnitType);
 			setPartName(partName);
 			setPartNumber(partNum);
+			setLocation(location);
 		}
 		catch (IOException e) {
 			//throw new IOException("Exception thrown during Part creation: \n\t" + e);
@@ -29,8 +32,9 @@ public class Part implements Comparable<Part> {
 		}
 	}
 	
-	public Part(Integer id, Integer quantity, String quantityUnitType, String partName, String partNum, String vendor) throws IOException {
-		this(id, quantity, quantityUnitType, partName, partNum);
+	/* This constructor omits the optional "vendor" parameter */
+	public Part(Integer id, Integer quantity, String quantityUnitType, String partName, String partNum, String vendor, String location) throws IOException {
+		this(id, quantity, quantityUnitType, partName, partNum, location);
 		setVendor(vendor);
 	}
 	
@@ -60,6 +64,10 @@ public class Part implements Comparable<Part> {
 	
 	public String getVendor() {
 		return this.vendor;
+	}
+	
+	public String getLocation() {
+		return this.location;
 	}
 	
 	@Override
@@ -113,6 +121,19 @@ public class Part implements Comparable<Part> {
 		throw new IOException("Error: unit type unrecognized.");
 	}
 	
+	private void setLocation(String location) throws IOException {
+		for (String loc : locationTypes) {
+			if (loc.equals(location) && !loc.equals("Unknown")) {
+				this.location = location.trim();
+				return;
+			}
+			else if (loc.equals(location) && loc.equals("Unknown")) {
+				throw new IOException("Error: location cannot be listed as \"unknown.\"");
+			}
+		}
+		throw new IOException("Error: location unrecognized.");
+	}
+	
 	private void setPartName(String partName) throws IOException {
 		if (partName.length() > maxPartNameLength) {
 			throw new IOException("Error: part name is too long (" + maxPartNameLength + " characters max).");
@@ -164,7 +185,7 @@ public class Part implements Comparable<Part> {
 		}
 	};
 	
-	// used to sort by part name in descending order
+	// used to sort by unit type in descending order
 		public static Comparator<Part> QuantityUnitTypeDescending = new Comparator<Part>() {
 			public int compare(Part part, Part anotherPart) {
 				String unitType1 = part.getQuantityUnitType();
@@ -173,7 +194,7 @@ public class Part implements Comparable<Part> {
 			}
 		};
 		
-		// used to sort by part name in ascending order
+		// used to sort by unit type in ascending order
 		public static Comparator<Part> QuantityUnitTypeAscending = new Comparator<Part>() {
 			public int compare(Part part, Part anotherPart) {
 				String unitType1 = part.getQuantityUnitType();
@@ -218,7 +239,7 @@ public class Part implements Comparable<Part> {
 		}
 	};
 	
-	// used to sort by part number in ascending order
+	// used to sort by vendor in descending order
 	public static Comparator<Part> VendorDescending = new Comparator<Part>() {
 		public int compare(Part part, Part anotherPart) {
 			String vendor1 = part.getVendor().toUpperCase();
@@ -227,11 +248,29 @@ public class Part implements Comparable<Part> {
 		}
 	};
 	
-	// used to sort by part number in ascending order
+	// used to sort by vendor in ascending order
 	public static Comparator<Part> VendorAscending = new Comparator<Part>() {
 		public int compare(Part part, Part anotherPart) {
 			String vendor1 = part.getVendor().toUpperCase();
 			String vendor2 = anotherPart.getVendor().toUpperCase();
+			return vendor2.compareTo(vendor1);
+		}
+	};
+	
+	// used to sort by location in descending order
+	public static Comparator<Part> LocationDescending = new Comparator<Part>() {
+		public int compare(Part part, Part anotherPart) {
+			String vendor1 = part.getLocation().toUpperCase();
+			String vendor2 = anotherPart.getLocation().toUpperCase();
+			return vendor1.compareTo(vendor2);
+		}
+	};
+	
+	// used to sort by location in ascending order
+	public static Comparator<Part> LocationAscending = new Comparator<Part>() {
+		public int compare(Part part, Part anotherPart) {
+			String vendor1 = part.getLocation().toUpperCase();
+			String vendor2 = anotherPart.getLocation().toUpperCase();
 			return vendor2.compareTo(vendor1);
 		}
 	};
