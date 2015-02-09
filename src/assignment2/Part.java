@@ -8,13 +8,16 @@ public class Part implements Comparable<Part> {
 	private String partName = "";
 	private String partNumber = "";
 	private String vendor = "";
+	private String quantityUnitType = "Unknown";
+	private static String[] unitTypes = new String[] { "Unknown", "Linear Feet", "Pieces" };
 	private static int maxPartNameLength = 255;
 	private static int maxPartNumberLength = 20;
 	private static int maxVendorLength = 255;
 	
-	public Part(Integer quantity, String partName, String partNum) throws IOException {
+	public Part(Integer quantity, String quantityUnitType, String partName, String partNum) throws IOException {
 		try {
 			setQuantity(quantity);
+			setQuantityUnitType(quantityUnitType);
 			setPartName(partName);
 			setPartNumber(partNum);
 		}
@@ -24,13 +27,21 @@ public class Part implements Comparable<Part> {
 		}
 	}
 	
-	public Part(Integer quantity, String partName, String partNum, String vendor) throws IOException {
-		this(quantity, partName, partNum);
+	public Part(Integer quantity, String quantityUnitType, String partName, String partNum, String vendor) throws IOException {
+		this(quantity, quantityUnitType, partName, partNum);
 		setVendor(vendor);
 	}
 	
 	public Integer getQuantity() {
 		return this.quantity;
+	}
+	
+	public String getQuantityUnitType() {
+		return this.quantityUnitType;
+	}
+	
+	public static String[] getValidQuantityUnitTypes() {
+		return unitTypes;
 	}
 	
 	public String getPartName() {
@@ -74,6 +85,19 @@ public class Part implements Comparable<Part> {
 		}
 	}
 	
+	private void setQuantityUnitType(String quantityUnitType) throws IOException {
+		for (String unit : unitTypes) {
+			if (unit.equals(quantityUnitType) && !unit.equals("Unknown")) {
+				this.quantityUnitType = quantityUnitType.trim();
+				return;
+			}
+			else if (unit.equals(quantityUnitType) && unit.equals("Unknown")) {
+				throw new IOException("Error: unit type cannot be listed as \"unknown.\"");
+			}
+		}
+		throw new IOException("Error: unit type unrecognized.");
+	}
+	
 	private void setPartName(String partName) throws IOException {
 		if (partName.length() > maxPartNameLength) {
 			throw new IOException("Error: part name is too long (" + maxPartNameLength + " characters max).");
@@ -107,7 +131,7 @@ public class Part implements Comparable<Part> {
 		}
 	}
 
-	// used to sort by part name in descending order
+	// used to sort by quantity in descending order
 	public static Comparator<Part> QuantityDescending = new Comparator<Part>() {
 		public int compare(Part part, Part anotherPart) {
 			Integer quantity1 = part.getQuantity();
@@ -116,7 +140,7 @@ public class Part implements Comparable<Part> {
 		}
 	};
 	
-	// used to sort by part name in ascending order
+	// used to sort by quantity in ascending order
 	public static Comparator<Part> QuantityAscending = new Comparator<Part>() {
 		public int compare(Part part, Part anotherPart) {
 			Integer quantity1 = part.getQuantity();
@@ -124,6 +148,25 @@ public class Part implements Comparable<Part> {
 			return quantity2.compareTo(quantity1);
 		}
 	};
+	
+	// used to sort by part name in descending order
+		public static Comparator<Part> QuantityUnitTypeDescending = new Comparator<Part>() {
+			public int compare(Part part, Part anotherPart) {
+				String unitType1 = part.getQuantityUnitType();
+				String unitType2 = anotherPart.getQuantityUnitType();
+				return unitType1.compareTo(unitType2);
+			}
+		};
+		
+		// used to sort by part name in ascending order
+		public static Comparator<Part> QuantityUnitTypeAscending = new Comparator<Part>() {
+			public int compare(Part part, Part anotherPart) {
+				String unitType1 = part.getQuantityUnitType();
+				String unitType2 = anotherPart.getQuantityUnitType();
+				return unitType2.compareTo(unitType1);
+			}
+		};
+	
 	// used to sort by part name in descending order
 	public static Comparator<Part> PartNameDescending = new Comparator<Part>() {
 		public int compare(Part part, Part anotherPart) {

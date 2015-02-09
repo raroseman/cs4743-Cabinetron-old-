@@ -1,8 +1,10 @@
 package assignment2;
 
 import java.awt.Color;
+import java.awt.Toolkit;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,15 +15,22 @@ import javax.swing.border.EmptyBorder;
 public class PartView extends JFrame {
 	private JPanel partFrame;
 	private JButton cancel, ok, edit, save;
-	private JLabel partName, partNumber, partVendor, partQuantity, errorMessage;
+	private JLabel partName, partNumber, partVendor, partQuantity, partQuantityUnitType, errorMessage;
 	private JTextField nameField, numberField, vendorField, quantityField;
+	private JComboBox<String> quantityUnitTypeField;
 	
-	public PartView(String title) {
+	private int viewWidth, viewHeight;
+	
+	public PartView(PartsInventoryModel model, String title) {
 		super(title);
+		
+		viewWidth = 400;
+		viewHeight = 340;
 
-			this.setSize(340, 250);
+			this.setSize(viewWidth, viewHeight);
 			this.setVisible(true);
-			this.setLocation(900, 250);
+			this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - (viewWidth / 2) + 50, 
+					 (Toolkit.getDefaultToolkit().getScreenSize().height / 2) - (viewHeight / 2));
 			
 			partFrame = new JPanel();
 			partFrame.setBackground(Color.LIGHT_GRAY);
@@ -30,57 +39,68 @@ public class PartView extends JFrame {
 			partFrame.setLayout(null);
 			
 			partName = new JLabel("Name");
-			partName.setBounds(15, 15, 70, 30);
+			partName.setBounds(15, 15, 90, 30);
 			partFrame.add(partName);
 			
 			partNumber = new JLabel("#");
-			partNumber.setBounds(15, 45, 70, 30);
+			partNumber.setBounds(15, 45, 90, 30);
 			partFrame.add(partNumber);
 			
 			partVendor = new JLabel("Vendor");
-			partVendor.setBounds(15, 75, 70, 30);
+			partVendor.setBounds(15, 75, 90, 30);
 			partFrame.add(partVendor);
 			
 			partQuantity = new JLabel("Quantity");
-			partQuantity.setBounds(15, 105, 70, 30);
+			partQuantity.setBounds(15, 105, 90, 30);
 			partFrame.add(partQuantity);
+			
+			partQuantityUnitType = new JLabel("Unit Type");
+			partQuantityUnitType.setBounds(15, 135, 90, 30);
+			partFrame.add(partQuantityUnitType);
 			
 			errorMessage = new JLabel("");
 			errorMessage.setForeground(Color.red);
-			errorMessage.setBounds(15, 175, 280, 30);
+			errorMessage.setBounds(15, 175, 360, 30);
 			partFrame.add(errorMessage);
 			
 			cancel = new JButton("Cancel");
-			cancel.setBounds(225, 150, 75, 25);
+			cancel.setBounds(225, 210, 75, 25);
 			partFrame.add(cancel);
 			
 			ok = new JButton("OK");
-			ok.setBounds(155, 150, 70, 25);
+			ok.setBounds(155, 210, 70, 25);
 			partFrame.add(ok);
 			
 			edit = new JButton("Edit");
-			edit.setBounds(155, 150, 70, 25);
+			edit.setBounds(155, 210, 70, 25);
 			partFrame.add(edit);
 			
 			save = new JButton("Save");
-			save.setBounds(155, 150, 70, 25);
+			save.setBounds(155, 210, 70, 25);
 			partFrame.add(save);
 			
 			nameField = new JTextField();
-			nameField.setBounds(100, 20, 200, 20);
+			nameField.setBounds(120, 20, 200, 20);
 			partFrame.add(nameField);
 			
 			numberField = new JTextField();
-			numberField.setBounds(100, 50, 200, 20);
+			numberField.setBounds(120, 50, 200, 20);
 			partFrame.add(numberField);
 			
 			vendorField = new JTextField();
-			vendorField.setBounds(100, 80, 200, 20);
+			vendorField.setBounds(120, 80, 200, 20);
 			partFrame.add(vendorField);
 			
 			quantityField = new JTextField();
-			quantityField.setBounds(100, 110, 200, 20);
+			quantityField.setBounds(120, 110, 200, 20);
 			partFrame.add(quantityField);
+			
+			quantityUnitTypeField = new JComboBox<String>();
+			for (String unitType : model.getValidQuantityUnitTypes()) {
+				quantityUnitTypeField.addItem(unitType);
+			}
+			quantityUnitTypeField.setBounds(120, 140, 200, 20);
+			partFrame.add(quantityUnitTypeField);
 	}
 	
 	public void register(PartsInventoryController controller) {
@@ -113,6 +133,11 @@ public class PartView extends JFrame {
 		}
 	}
 	
+	public String getQuantityUnitType() {
+		int index = quantityUnitTypeField.getSelectedIndex();
+		return quantityUnitTypeField.getItemAt(index);
+	}
+	
 	public void setErrorMessage(String error) {
 		errorMessage.setText(error);
 	}
@@ -133,6 +158,10 @@ public class PartView extends JFrame {
 		quantityField.setText(String.valueOf(quantity));
 	}
 	
+	public void setQuantityUnitType(String quantityUnitType) {
+		quantityUnitTypeField.setSelectedItem(quantityUnitType);
+	}
+	
 	public void hideEditButton() {
 		edit.setVisible(false);
 	}
@@ -148,6 +177,7 @@ public class PartView extends JFrame {
 		numberField.setEnabled(false);
 		vendorField.setEnabled(false);
 		quantityField.setEnabled(false);
+		quantityUnitTypeField.setEnabled(false);
 	}
 	
 	public void enableEditable() {
@@ -156,5 +186,6 @@ public class PartView extends JFrame {
 		numberField.setEnabled(true);
 		vendorField.setEnabled(true);
 		quantityField.setEnabled(true);
+		quantityUnitTypeField.setEnabled(true);
 	}
 }
