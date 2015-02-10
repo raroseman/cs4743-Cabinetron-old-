@@ -19,7 +19,7 @@ public class Tester {
 	
 		for (int i = 1; i < 58; i++) {
 			try {
-				Part p = new Part(i, i, "Pieces", "MyPartName" + i, "MyPartNumber" + i, "Vendor" + i);
+				Part p = new Part(i, i, "Pieces", "MyPartName" + i, "MyPartNumber" + i, "MyExternalPartNumber" + i, "Vendor" + i);
 				partsInventoryModel.addPart(p);
 			}
 			catch (IOException e) {
@@ -35,8 +35,6 @@ public class Tester {
 		partsInventoryController = new PartsInventoryController(partsInventoryModel, partsInventoryView);
 			
 		partsInventoryView.register(partsInventoryController);
-		
-		
 		
 	}
 }

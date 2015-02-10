@@ -16,8 +16,8 @@ public class PartView extends JFrame {
 	private JPanel partFrame;
 	private JButton cancel, ok, edit, save;
 
-	private JLabel partName, partNumber, partVendor, partQuantity, partQuantityUnitType, partID, errorMessage;
-	private JTextField nameField, numberField, vendorField, quantityField, idField;
+	private JLabel partName, partNumber, partVendor, partQuantity, partQuantityUnitType, partID, externalPartNumber, errorMessage;
+	private JTextField nameField, numberField, vendorField, quantityField, idField,externalField;
 	private JComboBox<String> quantityUnitTypeField;
 	
 	private int viewWidth, viewHeight;
@@ -47,41 +47,45 @@ public class PartView extends JFrame {
 			partID.setBounds(15, 45, 70, 30);
 			partFrame.add(partID);
 			
-			partNumber = new JLabel("#");
+			partNumber = new JLabel("Part #");
 			partNumber.setBounds(15, 75, 90, 30);
 			partFrame.add(partNumber);
 			
+			externalPartNumber = new JLabel("External Part #");
+			externalPartNumber.setBounds(15, 105, 90, 30);
+			partFrame.add(externalPartNumber);
+			
 			partVendor = new JLabel("Vendor");
-			partVendor.setBounds(15, 105, 90, 30);
+			partVendor.setBounds(15, 135, 90, 30);
 			partFrame.add(partVendor);
 			
 			partQuantity = new JLabel("Quantity");
-			partQuantity.setBounds(15, 135, 90, 30);
+			partQuantity.setBounds(15, 165, 90, 30);
 			partFrame.add(partQuantity);
 			
 			partQuantityUnitType = new JLabel("Unit Type");
-			partQuantityUnitType.setBounds(15, 165, 90, 30);
+			partQuantityUnitType.setBounds(15, 195, 90, 30);
 			partFrame.add(partQuantityUnitType);
 			
 			errorMessage = new JLabel("");
 			errorMessage.setForeground(Color.red);
-			errorMessage.setBounds(15, 205, 360, 30);
+			errorMessage.setBounds(15, 265, 360, 30);
 			partFrame.add(errorMessage);
 			
 			cancel = new JButton("Cancel");
-			cancel.setBounds(225, 240, 75, 25);
+			cancel.setBounds(245, 240, 75, 25);
 			partFrame.add(cancel);
 			
 			ok = new JButton("OK");
-			ok.setBounds(155, 240, 70, 25);
+			ok.setBounds(175, 240, 70, 25);
 			partFrame.add(ok);
 			
 			edit = new JButton("Edit");
-			edit.setBounds(155, 240, 70, 25);
+			edit.setBounds(175, 240, 70, 25);
 			partFrame.add(edit);
 			
 			save = new JButton("Save");
-			save.setBounds(155, 240, 70, 25);
+			save.setBounds(175, 240, 70, 25);
 
 			partFrame.add(save);
 			
@@ -97,19 +101,23 @@ public class PartView extends JFrame {
 			numberField.setBounds(120, 80, 200, 20);
 			partFrame.add(numberField);
 			
+			externalField = new JTextField();
+			externalField.setBounds(120, 110, 200, 20);
+			partFrame.add(externalField);
+			
 			vendorField = new JTextField();
-			vendorField.setBounds(120, 110, 200, 20);
+			vendorField.setBounds(120, 140, 200, 20);
 			partFrame.add(vendorField);
 			
 			quantityField = new JTextField();
-			quantityField.setBounds(120, 140, 200, 20);
+			quantityField.setBounds(120, 170, 200, 20);
 			partFrame.add(quantityField);
 			
 			quantityUnitTypeField = new JComboBox<String>();
 			for (String unitType : model.getValidQuantityUnitTypes()) {
 				quantityUnitTypeField.addItem(unitType);
 			}
-			quantityUnitTypeField.setBounds(120, 170, 200, 20);
+			quantityUnitTypeField.setBounds(120, 200, 200, 20);
 			partFrame.add(quantityUnitTypeField);
 	}
 	
@@ -136,6 +144,10 @@ public class PartView extends JFrame {
 	}
 	public String getNumber() {
 		return numberField.getText();
+	}
+	
+	public String getExternalNumber() {
+		return externalField.getText();
 	}
 	
 	public String getVendor() {
@@ -174,6 +186,10 @@ public class PartView extends JFrame {
 		numberField.setText(number);
 	}
 	
+	public void setExternalNumber(String externalNumber) {
+		externalField.setText(externalNumber);
+	}
+	
 	public void setVendor(String vendor) {
 		vendorField.setText(vendor);
 	}
@@ -204,6 +220,7 @@ public class PartView extends JFrame {
 		nameField.setEnabled(false);
 		idField.setEnabled(false);
 		numberField.setEnabled(false);
+		externalField.setEnabled(false);
 		vendorField.setEnabled(false);
 		quantityField.setEnabled(false);
 		quantityUnitTypeField.setEnabled(false);
@@ -213,6 +230,7 @@ public class PartView extends JFrame {
 		save.setVisible(true);
 		nameField.setEnabled(true);
 		numberField.setEnabled(true);
+		externalField.setEnabled(true);
 		vendorField.setEnabled(true);
 		quantityField.setEnabled(true);
 		quantityUnitTypeField.setEnabled(true);
