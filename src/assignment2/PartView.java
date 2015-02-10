@@ -16,9 +16,9 @@ public class PartView extends JFrame {
 	private JPanel partFrame;
 	private JButton cancel, ok, edit, save;
 
-	private JLabel partName, partNumber, partVendor, partQuantity, partQuantityUnitType, partID, errorMessage;
+	private JLabel partName, partNumber, partVendor, partQuantity, partQuantityUnitType, partID, partLocation, errorMessage;
 	private JTextField nameField, numberField, vendorField, quantityField, idField;
-	private JComboBox<String> quantityUnitTypeField;
+	private JComboBox<String> quantityUnitTypeField, locationField;
 	
 	private int viewWidth, viewHeight;
 	
@@ -63,25 +63,29 @@ public class PartView extends JFrame {
 			partQuantityUnitType.setBounds(15, 165, 90, 30);
 			partFrame.add(partQuantityUnitType);
 			
+			partLocation = new JLabel("Location");
+			partLocation.setBounds(15, 195, 90, 30);
+			partFrame.add(partLocation);
+			
 			errorMessage = new JLabel("");
 			errorMessage.setForeground(Color.red);
-			errorMessage.setBounds(15, 205, 360, 30);
+			errorMessage.setBounds(15, 235, 360, 30);
 			partFrame.add(errorMessage);
 			
 			cancel = new JButton("Cancel");
-			cancel.setBounds(225, 240, 75, 25);
+			cancel.setBounds(225, 270, 75, 25);
 			partFrame.add(cancel);
 			
 			ok = new JButton("OK");
-			ok.setBounds(155, 240, 70, 25);
+			ok.setBounds(155, 270, 70, 25);
 			partFrame.add(ok);
 			
 			edit = new JButton("Edit");
-			edit.setBounds(155, 240, 70, 25);
+			edit.setBounds(155, 270, 70, 25);
 			partFrame.add(edit);
 			
 			save = new JButton("Save");
-			save.setBounds(155, 240, 70, 25);
+			save.setBounds(155, 270, 70, 25);
 
 			partFrame.add(save);
 			
@@ -111,6 +115,13 @@ public class PartView extends JFrame {
 			}
 			quantityUnitTypeField.setBounds(120, 170, 200, 20);
 			partFrame.add(quantityUnitTypeField);
+			
+			locationField = new JComboBox<String>();
+			for (String location : model.getValidLocationTypes()) {
+				locationField.addItem(location);
+			}
+			locationField.setBounds(120, 200, 200, 20);
+			partFrame.add(locationField);
 	}
 	
 	public void register(PartsInventoryController controller) {
@@ -158,6 +169,11 @@ public class PartView extends JFrame {
 		return quantityUnitTypeField.getItemAt(index);
 	}
 	
+	public String getPartLocation() {
+		int index = locationField.getSelectedIndex();
+		return locationField.getItemAt(index);
+	}
+	
 	public void setErrorMessage(String error) {
 		errorMessage.setText(error);
 	}
@@ -186,6 +202,10 @@ public class PartView extends JFrame {
 		quantityUnitTypeField.setSelectedItem(quantityUnitType);
 	}
 	
+	public void setLocation(String location) {
+		locationField.setSelectedItem(location);
+	}
+	
 	public void hideEditButton() {
 		edit.setVisible(false);
 	}
@@ -207,6 +227,7 @@ public class PartView extends JFrame {
 		vendorField.setEnabled(false);
 		quantityField.setEnabled(false);
 		quantityUnitTypeField.setEnabled(false);
+		locationField.setEnabled(false);
 	}
 	
 	public void enableEditable() {
@@ -216,5 +237,6 @@ public class PartView extends JFrame {
 		vendorField.setEnabled(true);
 		quantityField.setEnabled(true);
 		quantityUnitTypeField.setEnabled(true);
+		locationField.setEnabled(true);
 	}
 }

@@ -79,7 +79,7 @@ public class PartsInventoryModel {
 		}
 	}
 	
-	public void editPart(Part partOld, int newID, int newQuantity, String newQuantityUnitType, String newName, String newPartNumber, String newVendor) throws Exception {
+	public void editPart(Part partOld, int newID, int newQuantity, String newQuantityUnitType, String newName, String newPartNumber, String newVendor, String newLocation) throws Exception {
 		int index = partsInventory.indexOf(partOld);
 	//	if (index == -1) {
 	//		throw new Exception("Error: the old part, " + partOld.getPartName() + " cannot be edited as it is not listed in inventory.");
@@ -89,7 +89,7 @@ public class PartsInventoryModel {
 			//throw new Exception("Part name \"" + newName + "\" is already listed in inventory.");
 			throw new Exception("Error: part name already exists in the inventory.");
 		} else {
-			Part newPart = new Part(newID, newQuantity, newQuantityUnitType, newName, newPartNumber, newVendor);
+			Part newPart = new Part(newID, newQuantity, newQuantityUnitType, newName, newPartNumber, newVendor, newLocation);
 			partsInventory.set(index, newPart);
 		}
 	}
@@ -146,6 +146,10 @@ public class PartsInventoryModel {
 		return Part.getValidQuantityUnitTypes();
 	}
 	
+	public String[] getValidLocationTypes() {
+		return Part.getValidLocationTypes();
+	}
+	
 	public void sortByQuantity() {
 		if (sortingMode == Part.QuantityDescending) {
 			sortingMode = Part.QuantityAscending;
@@ -192,6 +196,16 @@ public class PartsInventoryModel {
 		}
 		else {
 			sortingMode = Part.VendorDescending;
+		}
+		partsInventory.sort(sortingMode);
+	}
+	
+	public void sortByLocation() {
+		if (sortingMode == Part.LocationDescending) {
+			sortingMode = Part.LocationAscending;
+		}
+		else {
+			sortingMode = Part.LocationDescending;
 		}
 		partsInventory.sort(sortingMode);
 	}

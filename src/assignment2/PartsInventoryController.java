@@ -89,7 +89,7 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 			case "Save":
 				if (selectedPart != null) {
 					try {
-						Part newPart = new Part(partView.getID(), partView.getQuantity(), partView.getQuantityUnitType(), partView.getName(), partView.getNumber(), partView.getVendor());
+						Part newPart = new Part(partView.getID(), partView.getQuantity(), partView.getQuantityUnitType(), partView.getName(), partView.getNumber(), partView.getVendor(), partView.getPartLocation());
 						partsInventoryModel.editPart(selectedPart, newPart);
 						partView.dispose();
 						inventoryView.updatePanel();
@@ -105,7 +105,7 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 				break;
 			case "OK":
 				try {
-					Part part = new Part(++id, partView.getQuantity(), partView.getQuantityUnitType(), partView.getName(), partView.getNumber(), partView.getVendor());		
+					Part part = new Part(++id, partView.getQuantity(), partView.getQuantityUnitType(), partView.getName(), partView.getNumber(), partView.getVendor(), partView.getPartLocation());		
 					partsInventoryModel.addPart(part);
 					partView.dispose();
 					inventoryView.updatePanel();
@@ -148,6 +148,12 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 			case "Quantity":
 				ChangeButtonColors(e);
 				partsInventoryModel.sortByQuantity();
+				inventoryView.updatePanel();
+				inventoryView.repaint();
+				break;
+			case "Location":
+				ChangeButtonColors(e);
+				partsInventoryModel.sortByLocation();
 				inventoryView.updatePanel();
 				inventoryView.repaint();
 				break;

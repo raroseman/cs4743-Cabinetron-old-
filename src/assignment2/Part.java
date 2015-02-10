@@ -50,6 +50,10 @@ public class Part implements Comparable<Part> {
 		return unitTypes;
 	}
 	
+	public static String[] getValidLocationTypes() {
+		return locationTypes;
+	}
+	
 	public String getPartName() {
 		return this.partName;
 	}
