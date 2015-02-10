@@ -29,8 +29,8 @@ public class PartsInventoryView extends JFrame  {
 		super("Cabinetron");
 		this.model = model;
 
-		GUIWidth = 400;
-		GUIHeight = 500;
+		GUIWidth = 800;
+		GUIHeight = 600;
 
 		this.setSize(GUIWidth, GUIHeight);
 		this.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width / 2) - (GUIWidth / 2), 
@@ -77,18 +77,18 @@ public class PartsInventoryView extends JFrame  {
 		
 		// Creates and adds the "add" button to the inventory frame
 		addPart = new JButton("Add");
-		addPart.setBounds(15, 410, 70, 30);
+		addPart.setBounds(15, 515, 70, 30);
 		inventoryFrame.add(addPart);
 		
 		// Creates and adds the "delete" button to the inventory frame
 		deletePart = new JButton("Delete");
-		deletePart.setBounds(105, 410, 70, 30);
+		deletePart.setBounds(105, 515, 70, 30);
 		disableDelete();
 		inventoryFrame.add(deletePart);
 		
 		// Creates and adds the "view" button to the inventory frame
 		viewPart = new JButton("View");
-		viewPart.setBounds(295, 410, 70, 30);
+		viewPart.setBounds(695, 515, 70, 30);
 		disableView();
 		inventoryFrame.add(viewPart);
 		
