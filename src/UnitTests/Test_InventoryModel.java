@@ -16,6 +16,7 @@ public class Test_InventoryModel {
 	String quantityUnitType;
 	String partName;
 	String partNumber;
+	String externalPartNumber;
 	String vendor;
 	Part p;
 	
@@ -26,6 +27,7 @@ public class Test_InventoryModel {
 		quantityUnitType = "Pieces";
 		partName = "The Part Name v1.0";
 		partNumber = "18J-2015A1";
+		externalPartNumber = "18D00B";
 		vendor = "The_Vendor @ 1 UTSA Cir";
 		pim = new PartsInventoryModel();
 	}
@@ -33,7 +35,7 @@ public class Test_InventoryModel {
 	@Test
 	public void testInventoryModel_AddPartAsObject() {
 		try {
-			p = new Part(id, quantity, quantityUnitType, partName, partNumber);
+			p = new Part(id, quantity, quantityUnitType, partName, partNumber, externalPartNumber);
 			pim.addPart(p);
 			assertTrue(pim.getSize() == 1);
 			assertTrue(pim.findPartName(partName).getPartName().equals(partName)); // If found, a Part is returned - validate partName match
@@ -238,7 +240,7 @@ public class Test_InventoryModel {
 			pim.addPart(id, quantity, quantityUnitType, partName, partNumber, vendor);
 			assertTrue(pim.getSize() == 1);
 			assertTrue((partOriginal = pim.findPartName(partName)) != null); // should find a valid Part object
-			pim.editPart(partOriginal, 1, 42, "Linear Feet", "ThisNewPartName", partNumber, "DifferentVendor");
+			pim.editPart(partOriginal, 1, 42, "Linear Feet", "ThisNewPartName", partNumber, externalPartNumber, "DifferentVendor");
 			assertTrue(pim.findPartName(partName) == null); // should not find the old Part name
 			assertTrue(pim.findPartName("ThisNewPartName") != null); // should find the new Part name
 			assertTrue(pim.getSize() == 1);

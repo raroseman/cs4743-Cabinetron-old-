@@ -14,7 +14,7 @@ public class PartsInventoryModel {
 	
 	public void addPart(Part p) throws Exception {
 		try {
-			addPart(p.getID(), p.getQuantity(), p.getQuantityUnitType(), p.getPartName(), p.getPartNumber(), p.getVendor());
+			addPart(p.getID(), p.getQuantity(), p.getQuantityUnitType(), p.getPartName(), p.getPartNumber(), p.getExternalNumber(), p.getVendor());
 		}
 		catch (IOException e) {
 			throw new IOException(e.getMessage());
@@ -24,9 +24,9 @@ public class PartsInventoryModel {
 		}
 	}
 	
-	public void addPart(Integer id, Integer quantity, String unitOfQuantity, String partName, String partNumber) throws Exception {
+	public void addPart(Integer id, Integer quantity, String unitOfQuantity, String partName, String partNumber, String externalPartNumber) throws Exception {
 		try {
-			addPart(id, quantity, unitOfQuantity, partName, partNumber, "");
+			addPart(id, quantity, unitOfQuantity, partName, partNumber, externalPartNumber, "");
 		}
 		catch (IOException e) {
 			throw new IOException(e.getMessage());
@@ -36,12 +36,12 @@ public class PartsInventoryModel {
 		}
 	}
 	
-	public void addPart(Integer id, Integer quantity, String unitOfQuantity, String partName, String partNumber, String vendor) throws Exception, IOException {
+	public void addPart(Integer id, Integer quantity, String unitOfQuantity, String partName, String partNumber, String externalPartNumber, String vendor) throws Exception, IOException {
 		if (quantity <= 0) {
 			throw new IOException("A new item requires quantity greater than zero.");
 		}
 		try {
-			Part p = new Part(id, quantity, unitOfQuantity, partName, partNumber, vendor);
+			Part p = new Part(id, quantity, unitOfQuantity, partName, partNumber, externalPartNumber, vendor);
 			if (findPartName(p.getPartName()) != null) {
 				throw new Exception("Part name \"" + p.getPartName() + "\" is already listed in inventory.");
 			}
@@ -79,7 +79,7 @@ public class PartsInventoryModel {
 		}
 	}
 	
-	public void editPart(Part partOld, int newID, int newQuantity, String newQuantityUnitType, String newName, String newPartNumber, String newVendor) throws Exception {
+	public void editPart(Part partOld, int newID, int newQuantity, String newQuantityUnitType, String newName, String newPartNumber, String newExternalPartNumber, String newVendor) throws Exception {
 		int index = partsInventory.indexOf(partOld);
 	//	if (index == -1) {
 	//		throw new Exception("Error: the old part, " + partOld.getPartName() + " cannot be edited as it is not listed in inventory.");
@@ -89,7 +89,7 @@ public class PartsInventoryModel {
 			//throw new Exception("Part name \"" + newName + "\" is already listed in inventory.");
 			throw new Exception("Error: part name already exists in the inventory.");
 		} else {
-			Part newPart = new Part(newID, newQuantity, newQuantityUnitType, newName, newPartNumber, newVendor);
+			Part newPart = new Part(newID, newQuantity, newQuantityUnitType, newName, newPartNumber, newExternalPartNumber, newVendor);
 			partsInventory.set(index, newPart);
 		}
 	}
@@ -124,12 +124,12 @@ public class PartsInventoryModel {
 		for (int i = 0; i < 80; i++) {
 			horizontalSeparator += '-';
 		}
-		System.out.printf("%8s   %17s   %17s   %8s   %17s\n",
+		System.out.printf("%8s   %17s   %17s   %8s   %17s   %17s\n",
 				"Record #", "Part #", "Part Name", "Quantity", "Quantity Unit Type", "Vendor");
 		System.out.println(horizontalSeparator);
 		for (Part part : partsInventory) {
-			System.out.printf("%8s | %17s | %17s | %8s | %17s\n",
-					recordNum++, part.getPartNumber(), part.getPartName(), part.getQuantity(), part.getQuantityUnitType(), part.getVendor());
+			System.out.printf("%8s | %17s | %17s | %8s | %17s | %17s\n",
+					recordNum++, part.getPartNumber(), part.getPartName(), part.getQuantity(), part.getQuantityUnitType(), part.getExternalNumber());
 			System.out.println(horizontalSeparator);
 		}
 	}

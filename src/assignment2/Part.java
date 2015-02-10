@@ -8,20 +8,23 @@ public class Part implements Comparable<Part> {
 	private Integer quantity = 0;
 	private String partName = "";
 	private String partNumber = "";
+	private String externalPartNumber = "";
 	private String vendor = "";
 	private String quantityUnitType = "Unknown";
 	private static String[] unitTypes = new String[] { "Unknown", "Linear Feet", "Pieces" };
 	private static int maxPartNameLength = 255;
 	private static int maxPartNumberLength = 20;
 	private static int maxVendorLength = 255;
+	private static int maxExternalNumberLength = 50;
 	
-	public Part(Integer id, Integer quantity, String quantityUnitType, String partName, String partNum) throws IOException {
+	public Part(Integer id, Integer quantity, String quantityUnitType, String partName, String partNum, String externalPartNumber) throws IOException {
 		try {
 			setID(id);
 			setQuantity(quantity);
 			setQuantityUnitType(quantityUnitType);
 			setPartName(partName);
 			setPartNumber(partNum);
+			setExternalPartNumber(externalPartNumber);
 		}
 		catch (IOException e) {
 			//throw new IOException("Exception thrown during Part creation: \n\t" + e);
@@ -29,8 +32,8 @@ public class Part implements Comparable<Part> {
 		}
 	}
 	
-	public Part(Integer id, Integer quantity, String quantityUnitType, String partName, String partNum, String vendor) throws IOException {
-		this(id, quantity, quantityUnitType, partName, partNum);
+	public Part(Integer id, Integer quantity, String quantityUnitType, String partName, String partNum, String externalPartNumber, String vendor) throws IOException {
+		this(id, quantity, quantityUnitType, partName, partNum, externalPartNumber);
 		setVendor(vendor);
 	}
 	
@@ -56,6 +59,10 @@ public class Part implements Comparable<Part> {
 	
 	public String getPartNumber() {
 		return this.partNumber;
+	}
+	
+	public String getExternalNumber() {
+		return this.externalPartNumber;
 	}
 	
 	public String getVendor() {
@@ -134,6 +141,15 @@ public class Part implements Comparable<Part> {
 		}
 		else {
 			this.partNumber = partNumber.trim();
+		}
+	}
+	
+	private void setExternalPartNumber(String externalPartNumber) throws IOException {
+		if (externalPartNumber.length() > maxExternalNumberLength) {
+			throw new IOException("Error: external part number is too long (" + maxExternalNumberLength + " characters max).");
+		}
+		else {
+			this.externalPartNumber = externalPartNumber.trim();
 		}
 	}
 	

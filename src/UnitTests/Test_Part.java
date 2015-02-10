@@ -15,6 +15,7 @@ public class Test_Part {
 	String unitOfQuantity;
 	String partName;
 	String partNumber;
+	String externalPartNumber;
 	String vendor;
 	Part p;
 	
@@ -25,13 +26,14 @@ public class Test_Part {
 		unitOfQuantity = "Pieces";
 		partName = "The Part Name v1.0";
 		partNumber = "18J-2015A1";
+		externalPartNumber = "18D00B";
 		vendor = "The_Vendor @ 1 UTSA Cir";
 	}
 	
 	@Test
 	public void testPartCreation_NoVendor() {
 		try {
-			p = new Part(id, quantity, unitOfQuantity, partName, partNumber);
+			p = new Part(id, quantity, unitOfQuantity, partName, partNumber, externalPartNumber);
 			assertTrue(p.getQuantity() == quantity);
 			assertTrue(p.getQuantityUnitType().equals(unitOfQuantity));
 			assertTrue(p.getPartName().equals(partName));
@@ -62,7 +64,7 @@ public class Test_Part {
 	public void testPartCreation_QuantityError() throws IOException {
 		Integer badQuantity = -1;
 		try {
-			p = new Part(id, badQuantity, unitOfQuantity, partName, partNumber);
+			p = new Part(id, badQuantity, unitOfQuantity, partName, partNumber, externalPartNumber);
 			fail("Should have thrown an exception: quantity is: " + 
 					badQuantity + "and was set as " + p.getQuantity());
 		}
@@ -75,7 +77,7 @@ public class Test_Part {
 	public void testPartCreation_UnitOfQuantityError_Unrecognized() throws IOException {
 		String badUnit = "Feet";
 		try {
-			p = new Part(id, quantity, badUnit, partName, partNumber);
+			p = new Part(id, quantity, badUnit, partName, partNumber, externalPartNumber);
 			fail("Should have thrown an exception: unit type of quantity is: " + 
 					badUnit + "and was set as " + p.getQuantityUnitType());
 		}
@@ -88,7 +90,7 @@ public class Test_Part {
 	public void testPartCreation_UnitOfQuantityError_Unknown() throws IOException {
 		String badUnit = "Unknown";
 		try {
-			p = new Part(id, quantity, badUnit, partName, partNumber);
+			p = new Part(id, quantity, badUnit, partName, partNumber, externalPartNumber);
 			fail("Should have thrown an exception: unit type of quantity is: " + 
 					badUnit + "and was set as " + p.getQuantityUnitType());
 		}
@@ -101,7 +103,7 @@ public class Test_Part {
 	public void testPartCreation_UnitOfQuantityError_Empty() throws IOException {
 		String badUnit = "";
 		try {
-			p = new Part(id, quantity, badUnit, partName, partNumber);
+			p = new Part(id, quantity, badUnit, partName, partNumber, externalPartNumber);
 			fail("Should have thrown an exception: unit type of quantity is: " + 
 					badUnit + "and was set as " + p.getQuantityUnitType());
 		}
@@ -117,7 +119,7 @@ public class Test_Part {
 			longPartName = longPartName + "A"; // add one letter to the string
 		}
 		try {
-			p = new Part(id, quantity, unitOfQuantity, longPartName, partNumber);
+			p = new Part(id, quantity, unitOfQuantity, longPartName, partNumber, externalPartNumber);
 		}
 		catch (IOException e) {
 			fail("Exception thrown during unexceptional part creation: partName length is: " + 
@@ -132,7 +134,7 @@ public class Test_Part {
 			longPartName = longPartName + "A"; // add one letter to the string
 		}
 		try {
-			p = new Part(id, quantity, unitOfQuantity, longPartName, partNumber);
+			p = new Part(id, quantity, unitOfQuantity, longPartName, partNumber, externalPartNumber);
 			fail("Should have thrown an exception: partName length is: " + 
 					p.getPartName().length() + " and limit is: " + Part.getMaxPartNameLength());
 		}
@@ -148,7 +150,7 @@ public class Test_Part {
 			longPartNumber = longPartNumber + "A"; // add one letter to the string
 		}
 		try {
-			p = new Part(id, quantity, unitOfQuantity, partName, longPartNumber);
+			p = new Part(id, quantity, unitOfQuantity, partName, longPartNumber, externalPartNumber);
 		}
 		catch (IOException e) {
 			fail("Exception thrown during unexceptional part creation: partName length is: " + 
@@ -163,7 +165,7 @@ public class Test_Part {
 			longPartNumber = longPartNumber + "A"; // add one letter to the string
 		}
 		try {
-			p = new Part(id, quantity, unitOfQuantity, partName, longPartNumber);
+			p = new Part(id, quantity, unitOfQuantity, partName, longPartNumber, externalPartNumber);
 			fail("Should have thrown an exception: partName length is: " + 
 					p.getPartName().length() + " and limit is: " + Part.getMaxPartNumberLength());
 		}
