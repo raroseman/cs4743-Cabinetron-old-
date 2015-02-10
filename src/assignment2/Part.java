@@ -279,6 +279,24 @@ public class Part implements Comparable<Part> {
 		}
 	};
 	
+	// used to sort by location in descending order
+	public static Comparator<Part> IDDescending = new Comparator<Part>() {
+		public int compare(Part part, Part anotherPart) {
+			Integer vendor1 = part.getID();
+			Integer vendor2 = anotherPart.getID();
+			return vendor1.compareTo(vendor2);
+		}
+	};
+	
+	// used to sort by location in ascending order
+	public static Comparator<Part> IDAscending = new Comparator<Part>() {
+		public int compare(Part part, Part anotherPart) {
+			Integer vendor1 = part.getID();
+			Integer vendor2 = anotherPart.getID();
+			return vendor2.compareTo(vendor1);
+		}
+	};
+	
 	@Override
 	public int compareTo(Part o) {
 		// TODO Auto-generated method stub

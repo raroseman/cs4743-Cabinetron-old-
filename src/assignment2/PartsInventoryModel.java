@@ -210,4 +210,14 @@ public class PartsInventoryModel {
 		partsInventory.sort(sortingMode);
 	}
 	
+	public void sortByID() {
+		if (sortingMode == Part.IDDescending) {
+			sortingMode = Part.IDAscending;
+		}
+		else {
+			sortingMode = Part.IDDescending;
+		}
+		partsInventory.sort(sortingMode);
+	}
+	
 }

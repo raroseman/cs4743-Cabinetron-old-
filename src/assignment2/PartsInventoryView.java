@@ -123,6 +123,9 @@ public class PartsInventoryView extends JFrame  {
 		        int col = table.columnAtPoint(e.getPoint());
 		        String columnName = table.getColumnName(col);
 		        switch (columnName) {
+		        case "ID":
+		        	model.sortByID();
+		        	break;
 		        case "Part Name":
 		        	model.sortByPartName();
 		        	break;
