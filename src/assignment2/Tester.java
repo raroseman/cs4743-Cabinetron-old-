@@ -19,7 +19,8 @@ public class Tester {
 	
 		for (int i = 1; i < 58; i++) {
 			try {
-				Part p = new Part(i, i, "Pieces", "MyPartName" + i, "MyPartNumber" + i, "MyExternalPartNumber" + i, "Vendor" + i);
+				Part p = new Part(i, i, "Pieces", "MyPartName" + i, "MyPartNumber" + i, "MyExternalPartNumber" + i, "Facility 2", "Vendor" + i);
+
 				partsInventoryModel.addPart(p);
 			}
 			catch (IOException e) {

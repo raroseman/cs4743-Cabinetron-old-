@@ -77,6 +77,7 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 					partView.setVendor(selectedPart.getVendor());
 					partView.setQuantity(selectedPart.getQuantity());
 					partView.setQuantityUnitType(selectedPart.getQuantityUnitType());
+					partView.setLocation(selectedPart.getLocation());
 					inventoryView.updatePanel();
 					inventoryView.repaint();
 					hasPartViewOpen = true;
@@ -90,7 +91,7 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 			case "Save":
 				if (selectedPart != null) {
 					try {
-						Part newPart = new Part(partView.getID(), partView.getQuantity(), partView.getQuantityUnitType(), partView.getName(), partView.getNumber(), partView.getExternalNumber(), partView.getVendor());
+						Part newPart = new Part(partView.getID(), partView.getQuantity(), partView.getQuantityUnitType(), partView.getName(), partView.getNumber(), partView.getExternalNumber(), partView.getPartLocation(), partView.getVendor());
 						partsInventoryModel.editPart(selectedPart, newPart);
 						partView.dispose();
 						inventoryView.updatePanel();
@@ -106,7 +107,7 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 				break;
 			case "OK":
 				try {
-					Part part = new Part(++id, partView.getQuantity(), partView.getQuantityUnitType(), partView.getName(), partView.getNumber(), partView.getExternalNumber(), partView.getVendor());		
+					Part part = new Part(++id, partView.getQuantity(), partView.getQuantityUnitType(), partView.getName(), partView.getNumber(), partView.getExternalNumber(), partView.getPartLocation(), partView.getVendor());			
 					partsInventoryModel.addPart(part);
 					partsInventoryModel.printInventory();
 					partView.dispose();
@@ -150,6 +151,12 @@ public class PartsInventoryController implements ActionListener, ListSelectionLi
 			case "Quantity":
 				ChangeButtonColors(e);
 				partsInventoryModel.sortByQuantity();
+				inventoryView.updatePanel();
+				inventoryView.repaint();
+				break;
+			case "Location":
+				ChangeButtonColors(e);
+				partsInventoryModel.sortByLocation();
 				inventoryView.updatePanel();
 				inventoryView.repaint();
 				break;

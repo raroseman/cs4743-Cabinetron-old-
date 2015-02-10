@@ -14,7 +14,7 @@ public class PartsInventoryModel {
 	
 	public void addPart(Part p) throws Exception {
 		try {
-			addPart(p.getID(), p.getQuantity(), p.getQuantityUnitType(), p.getPartName(), p.getPartNumber(), p.getExternalNumber(), p.getVendor());
+			addPart(p.getID(), p.getQuantity(), p.getQuantityUnitType(), p.getPartName(), p.getPartNumber(), p.getExternalNumber(), p.getLocation(), p.getVendor());
 		}
 		catch (IOException e) {
 			throw new IOException(e.getMessage());
@@ -24,9 +24,9 @@ public class PartsInventoryModel {
 		}
 	}
 	
-	public void addPart(Integer id, Integer quantity, String unitOfQuantity, String partName, String partNumber, String externalPartNumber) throws Exception {
+	public void addPart(Integer id, Integer quantity, String unitOfQuantity, String partName, String partNumber, String externalPartNumber, String location) throws Exception {
 		try {
-			addPart(id, quantity, unitOfQuantity, partName, partNumber, externalPartNumber, "");
+			addPart(id, quantity, unitOfQuantity, partName, partNumber, externalPartNumber, location, "");
 		}
 		catch (IOException e) {
 			throw new IOException(e.getMessage());
@@ -36,12 +36,13 @@ public class PartsInventoryModel {
 		}
 	}
 	
-	public void addPart(Integer id, Integer quantity, String unitOfQuantity, String partName, String partNumber, String externalPartNumber, String vendor) throws Exception, IOException {
+	public void addPart(Integer id, Integer quantity, String unitOfQuantity, String partName, String partNumber, String externalPartNumber, String location, String vendor) throws Exception, IOException {
+
 		if (quantity <= 0) {
 			throw new IOException("A new item requires quantity greater than zero.");
 		}
 		try {
-			Part p = new Part(id, quantity, unitOfQuantity, partName, partNumber, externalPartNumber, vendor);
+			Part p = new Part(id, quantity, unitOfQuantity, partName, partNumber, externalPartNumber, location, vendor);
 			if (findPartName(p.getPartName()) != null) {
 				throw new Exception("Part name \"" + p.getPartName() + "\" is already listed in inventory.");
 			}
@@ -79,7 +80,7 @@ public class PartsInventoryModel {
 		}
 	}
 	
-	public void editPart(Part partOld, int newID, int newQuantity, String newQuantityUnitType, String newName, String newPartNumber, String newExternalPartNumber, String newVendor) throws Exception {
+	public void editPart(Part partOld, int newID, int newQuantity, String newQuantityUnitType, String newName, String newPartNumber, String newExternalPartNumber, String newLocation, String newVendor) throws Exception {
 		int index = partsInventory.indexOf(partOld);
 	//	if (index == -1) {
 	//		throw new Exception("Error: the old part, " + partOld.getPartName() + " cannot be edited as it is not listed in inventory.");
@@ -89,7 +90,7 @@ public class PartsInventoryModel {
 			//throw new Exception("Part name \"" + newName + "\" is already listed in inventory.");
 			throw new Exception("Error: part name already exists in the inventory.");
 		} else {
-			Part newPart = new Part(newID, newQuantity, newQuantityUnitType, newName, newPartNumber, newExternalPartNumber, newVendor);
+			Part newPart = new Part(newID, newQuantity, newQuantityUnitType, newName, newPartNumber, newExternalPartNumber, newLocation, newVendor);
 			partsInventory.set(index, newPart);
 		}
 	}
@@ -146,6 +147,10 @@ public class PartsInventoryModel {
 		return Part.getValidQuantityUnitTypes();
 	}
 	
+	public String[] getValidLocationTypes() {
+		return Part.getValidLocationTypes();
+	}
+	
 	public void sortByQuantity() {
 		if (sortingMode == Part.QuantityDescending) {
 			sortingMode = Part.QuantityAscending;
@@ -192,6 +197,26 @@ public class PartsInventoryModel {
 		}
 		else {
 			sortingMode = Part.VendorDescending;
+		}
+		partsInventory.sort(sortingMode);
+	}
+	
+	public void sortByLocation() {
+		if (sortingMode == Part.LocationDescending) {
+			sortingMode = Part.LocationAscending;
+		}
+		else {
+			sortingMode = Part.LocationDescending;
+		}
+		partsInventory.sort(sortingMode);
+	}
+	
+	public void sortByID() {
+		if (sortingMode == Part.IDDescending) {
+			sortingMode = Part.IDAscending;
+		}
+		else {
+			sortingMode = Part.IDDescending;
 		}
 		partsInventory.sort(sortingMode);
 	}
