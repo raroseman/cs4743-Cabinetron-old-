@@ -5,9 +5,11 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 @SuppressWarnings("serial")
 public class PartsInventoryView extends JFrame  {	
@@ -17,7 +19,7 @@ public class PartsInventoryView extends JFrame  {
 	private JButton addPart, deletePart, viewPart;
 	private int GUIWidth;
 	private int GUIHeight;
-	private String[] columnNames = {"ID", "Part Name", "Part Number", "External Part Number", "Vendor", "Quantity", "Quantity Unit Type", "Location"};
+	private String[] columnNames = {"ID", "Part Name", "Part Number", "External Part #", "Vendor", "Quantity", "Quantity Unit Type", "Location"};
 	private JTable table;
 	private JScrollPane tableScrollPane;
 	private JPanel p;
@@ -72,6 +74,19 @@ public class PartsInventoryView extends JFrame  {
 		tableScrollPane = new JScrollPane(table);
 		tableScrollPane.setPreferredSize(new Dimension(GUIWidth - 30, GUIHeight - 100));
 		tableScrollPane.setVisible(true);
+		
+		TableColumn column = null;
+		
+		for (int i = 0; i < columnNames.length; i++) {
+			column = table.getColumnModel().getColumn(i);
+			if (column.getHeaderValue().toString() == "Quantity") {
+				column.setPreferredWidth(GUIWidth / 32);
+			} if (column.getHeaderValue().toString() == "ID") {
+				column.setPreferredWidth(GUIWidth / 32);
+			} if (column.getHeaderValue().toString() == "Vendor") {
+				column.setPreferredWidth(GUIWidth / 16);
+			} 
+		}
 
 		p.add(tableScrollPane);
 		
